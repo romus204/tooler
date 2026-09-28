@@ -1,0 +1,31 @@
+{{define "layout"}}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{.Title}} — Учёт инструментов</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="/tools">🛠 Учёт инструментов</a>
+    <nav>
+      <a href="/tools">Инструменты</a>
+      <a href="/categories">Категории</a>
+    </nav>
+    <form class="search-form" action="/tools" method="get">
+      <input type="search" name="q" placeholder="Поиск..." value="{{.Query}}">
+      <button type="submit">Найти</button>
+    </form>
+  </div>
+</header>
+<main class="container">
+  {{if .Flash}}<div class="flash">{{.Flash}}</div>{{end}}
+  {{if .Error}}<div class="flash flash-error">{{.Error}}</div>{{end}}
+  {{template "content" .}}
+</main>
+</body>
+</html>
+{{end}}

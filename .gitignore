@@ -1,0 +1,6 @@
+/data/*.db
+/data/*.db-*
+/tooler
+/bin/
+*.log
+.env

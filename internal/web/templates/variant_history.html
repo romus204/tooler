@@ -1,0 +1,24 @@
+{{define "content"}}
+{{$v := .Data.Variant}}
+<div class="breadcrumb"><a href="/tools">Инструменты</a> / <a href="/tools/{{$v.ToolID}}">{{$v.ToolName}}</a> / {{$v.Size}}</div>
+<h1>История: {{$v.ToolName}} {{$v.Size}}</h1>
+<p class="muted">Сейчас: {{$v.Quantity}}{{if $v.Location}} · где лежит: {{$v.Location}}{{end}}</p>
+
+{{if not .Data.Movements}}
+<p class="empty">Изменений пока не было.</p>
+{{else}}
+<table class="table">
+  <thead><tr><th>Дата</th><th>Изменение</th><th>Источник</th><th>Причина</th></tr></thead>
+  <tbody>
+    {{range .Data.Movements}}
+    <tr>
+      <td>{{.CreatedAt.Format "02.01.2006 15:04"}}</td>
+      <td class="{{if lt .Delta 0}}delta-neg{{else}}delta-pos{{end}}">{{if gt .Delta 0}}+{{end}}{{.Delta}}</td>
+      <td>{{.Source}}</td>
+      <td>{{.Reason}}</td>
+    </tr>
+    {{end}}
+  </tbody>
+</table>
+{{end}}
+{{end}}

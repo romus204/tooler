@@ -1,0 +1,71 @@
+{{define "content"}}
+{{$tool := .Data.Tool}}
+<div class="page-header">
+  <div>
+    <div class="breadcrumb"><a href="/tools">Инструменты</a> / {{$tool.Name}}</div>
+    <h1>{{$tool.Name}}</h1>
+    <p class="muted">
+      {{if $tool.Brand}}{{$tool.Brand}} · {{end}}
+      {{if $tool.CategoryName}}{{$tool.CategoryName}}{{else}}без категории{{end}}
+    </p>
+    {{if $tool.Description}}<p>{{$tool.Description}}</p>{{end}}
+  </div>
+  <div class="page-header-actions">
+    <a class="btn" href="/tools/{{$tool.ID}}/edit">Редактировать</a>
+    <form method="post" action="/tools/{{$tool.ID}}/delete" class="inline-form" onsubmit="return confirm('Удалить инструмент «{{$tool.Name}}» со всеми размерами?');">
+      <button type="submit" class="btn btn-danger">Удалить</button>
+    </form>
+  </div>
+</div>
+
+<h2>Размеры</h2>
+{{if not $tool.Variants}}
+<p class="empty">Размеров пока нет — добавьте первый ниже.</p>
+{{else}}
+<table class="table">
+  <thead>
+    <tr>
+      <th>Размер</th>
+      <th>Код</th>
+      <th>Количество</th>
+      <th>Где лежит</th>
+      <th>Изменить количество</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {{range $tool.Variants}}
+    <tr>
+      <td>{{.Size}}</td>
+      <td>{{.SKU}}</td>
+      <td>{{.Quantity}} {{$tool.Unit}}</td>
+      <td>{{.Location}}</td>
+      <td>
+        <form method="post" action="/variants/{{.ID}}/adjust" class="adjust-form">
+          <input type="number" name="delta" placeholder="±кол-во" required>
+          <input type="text" name="reason" placeholder="причина">
+          <button type="submit" class="btn btn-sm">Применить</button>
+        </form>
+      </td>
+      <td class="row-actions">
+        <a href="/variants/{{.ID}}/edit">изменить</a>
+        <a href="/variants/{{.ID}}/history">история</a>
+        <form method="post" action="/variants/{{.ID}}/delete" class="inline-form" onsubmit="return confirm('Удалить размер {{.Size}}?');">
+          <button type="submit" class="link-btn">удалить</button>
+        </form>
+      </td>
+    </tr>
+    {{end}}
+  </tbody>
+</table>
+{{end}}
+
+<h2>Добавить размер</h2>
+<form method="post" action="/tools/{{$tool.ID}}/variants" class="form-inline">
+  <input type="text" name="size" placeholder="Размер (например 8x160мм)" required>
+  <input type="text" name="sku" placeholder="Код">
+  <input type="number" name="quantity" placeholder="Сколько есть" value="0" min="0">
+  <input type="text" name="location" placeholder="Где лежит">
+  <button type="submit" class="btn btn-primary">Добавить</button>
+</form>
+{{end}}

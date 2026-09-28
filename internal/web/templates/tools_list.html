@@ -1,0 +1,46 @@
+{{define "content"}}
+<div class="page-header">
+  <h1>Инструменты</h1>
+  <a class="btn btn-primary" href="/tools/new">+ Добавить инструмент</a>
+</div>
+
+<form method="get" action="/tools" class="filter-form">
+  <input type="search" name="q" placeholder="Поиск по названию, бренду, описанию..." value="{{.Query}}">
+  <select name="category">
+    <option value="">Все категории</option>
+    {{range .Data.CategoryOptions}}
+    <option value="{{.ID}}" {{if .Selected}}selected{{end}}>{{indent .Depth}}{{.Name}}</option>
+    {{end}}
+  </select>
+  <button type="submit" class="btn">Фильтр</button>
+</form>
+
+{{if not .Data.Tools}}
+<p class="empty">Пока ничего нет. Добавьте первый инструмент.</p>
+{{else}}
+<table class="table">
+  <thead>
+    <tr>
+      <th>Название</th>
+      <th>Бренд</th>
+      <th>Категория</th>
+      <th>Размеров</th>
+      <th>Количество</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {{range .Data.Tools}}
+    <tr>
+      <td><a href="/tools/{{.ID}}">{{.Name}}</a></td>
+      <td>{{.Brand}}</td>
+      <td>{{.CategoryName}}</td>
+      <td>{{.VariantCount}}</td>
+      <td>{{.TotalQuantity}} {{.Unit}}</td>
+      <td><a href="/tools/{{.ID}}">Открыть →</a></td>
+    </tr>
+    {{end}}
+  </tbody>
+</table>
+{{end}}
+{{end}}

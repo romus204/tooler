@@ -1,0 +1,48 @@
+{{define "content"}}
+<h1>Категории</h1>
+<div class="category-layout">
+  <div class="category-tree">
+    {{if not .Data.Tree}}<p class="empty">Категорий пока нет.</p>{{end}}
+    {{range .Data.Tree}}{{template "category_node" .}}{{end}}
+  </div>
+  <div class="category-form-box">
+    <h2>{{if .Data.Editing}}Редактировать категорию{{else}}Новая категория{{end}}</h2>
+    <form method="post" action="{{.Data.FormAction}}" class="form">
+      <label>Название*
+        <input type="text" name="name" required value="{{if .Data.Editing}}{{.Data.Editing.Name}}{{end}}">
+      </label>
+      <label>Родительская категория
+        <select name="parent_id">
+          <option value="">— верхний уровень —</option>
+          {{range .Data.CategoryOptions}}
+          <option value="{{.ID}}" {{if .Selected}}selected{{end}}>{{indent .Depth}}{{.Name}}</option>
+          {{end}}
+        </select>
+      </label>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+        {{if .Data.Editing}}<a href="/categories" class="btn">Отмена</a>{{end}}
+      </div>
+    </form>
+  </div>
+</div>
+{{end}}
+
+{{define "category_node"}}
+<div class="category-node">
+  <div class="category-row">
+    <a href="/tools?category={{.ID}}">{{.Name}}</a>
+    <span class="category-actions">
+      <a href="/categories/{{.ID}}/edit">изменить</a>
+      <form method="post" action="/categories/{{.ID}}/delete" class="inline-form" onsubmit="return confirm('Удалить категорию «{{.Name}}»? Дочерние категории тоже будут удалены.');">
+        <button type="submit" class="link-btn">удалить</button>
+      </form>
+    </span>
+  </div>
+  {{if .Children}}
+  <div class="category-children">
+    {{range .Children}}{{template "category_node" .}}{{end}}
+  </div>
+  {{end}}
+</div>
+{{end}}

@@ -1,0 +1,29 @@
+{{define "content"}}
+<h1>{{if .Data.Tool}}Редактировать инструмент{{else}}Новый инструмент{{end}}</h1>
+<form method="post" action="{{.Data.FormAction}}" class="form">
+  <label>Название*
+    <input type="text" name="name" required value="{{if .Data.Tool}}{{.Data.Tool.Name}}{{end}}">
+  </label>
+  <label>Бренд
+    <input type="text" name="brand" value="{{if .Data.Tool}}{{.Data.Tool.Brand}}{{end}}">
+  </label>
+  <label>Категория
+    <select name="category_id">
+      <option value="">— без категории —</option>
+      {{range .Data.CategoryOptions}}
+      <option value="{{.ID}}" {{if .Selected}}selected{{end}}>{{indent .Depth}}{{.Name}}</option>
+      {{end}}
+    </select>
+  </label>
+  <label>Единица (шт, м, компл. и т.п.)
+    <input type="text" name="unit" value="{{if .Data.Tool}}{{.Data.Tool.Unit}}{{else}}шт{{end}}">
+  </label>
+  <label>Описание
+    <textarea name="description" rows="3">{{if .Data.Tool}}{{.Data.Tool.Description}}{{end}}</textarea>
+  </label>
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+    <a href="{{if .Data.Tool}}/tools/{{.Data.Tool.ID}}{{else}}/tools{{end}}" class="btn">Отмена</a>
+  </div>
+</form>
+{{end}}

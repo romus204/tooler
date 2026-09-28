@@ -1,0 +1,24 @@
+{{define "content"}}
+{{$v := .Data.Variant}}
+<div class="breadcrumb"><a href="/tools">Инструменты</a> / <a href="/tools/{{$v.ToolID}}">{{.Data.ToolName}}</a> / {{$v.Size}}</div>
+<h1>Редактировать размер</h1>
+<form method="post" action="{{.Data.FormAction}}" class="form">
+  <label>Размер*
+    <input type="text" name="size" required value="{{$v.Size}}">
+  </label>
+  <label>Код
+    <input type="text" name="sku" value="{{$v.SKU}}">
+  </label>
+  <label>Где лежит
+    <input type="text" name="location" value="{{$v.Location}}">
+  </label>
+  <label>Заметки
+    <textarea name="notes" rows="3">{{$v.Notes}}</textarea>
+  </label>
+  <p class="muted">Сейчас: {{$v.Quantity}}. Чтобы изменить количество, используйте форму «Изменить количество» на странице инструмента — так сохраняется история.</p>
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+    <a href="/tools/{{$v.ToolID}}" class="btn">Отмена</a>
+  </div>
+</form>
+{{end}}
